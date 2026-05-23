@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f1e8;
+  color: #2d2418;
+}
+
+header {
+  padding: 40px;
+  text-align: center;
+  background: #2d2418;
+  color: white;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+header p {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+main {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+section {
+  background: white;
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+}
+
+input {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+button {
+  padding: 10px 18px;
+  margin: 6px 4px 6px 0;
+  border: none;
+  border-radius: 8px;
+  background: #5b4630;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #3a2d20;
+}
+
+.agree {
+  display: block;
+  margin: 12px 0;
+}
+
+.agree input {
+  display: inline;
+  width: auto;
+}
+
+#userStatus {
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+nav a {
+  padding: 10px 14px;
+  background: #eee3d1;
+  color: #2d2418;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+nav a:hover {
+  background: #d8c6aa;
+}
+
+article {
+  padding: 16px 0;
+  border-top: 1px solid #ddd;
+}
+
+article h3 {
+  margin-bottom: 8px;
+}

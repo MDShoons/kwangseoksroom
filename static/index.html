@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>모창 AI 프로토타입</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">M</span>
+        <div>
+          <h1>모창 AI</h1>
+          <p>동의 기반 보컬 스타일 변환</p>
+        </div>
+      </div>
+      <button class="nav active" data-target="learn">학습란</button>
+      <button class="nav" data-target="vocal">보컬변환란</button>
+      <button class="nav" data-target="inst">반주변환란</button>
+      <div class="notice">
+        실제 클론 모델이 아닌 UI/백엔드 골격입니다. 본인 또는 허락받은 보컬만 사용하세요.
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="learn" class="panel active">
+        <div class="panel-header">
+          <div>
+            <h2>학습기능</h2>
+            <p>최대 10개, 총 5GB까지 보컬 데이터를 업로드하고 창법/톤 특징을 분석합니다.</p>
+          </div>
+          <span class="badge">나비야.wav 미리보기 포함</span>
+        </div>
+
+        <div class="card">
+          <label class="filebox">
+            <input id="trainFiles" type="file" accept="audio/*" multiple />
+            <strong>보컬 학습 데이터 업로드</strong>
+            <span>WAV/MP3/FLAC/M4A 등 · 최대 10개</span>
+          </label>
+          <div id="trainFileList" class="file-list"></div>
+          <button id="trainBtn" class="primary">학습 시작</button>
+        </div>
+
+        <div id="trainResult" class="result-grid"></div>
+      </section>
+
+      <section id="vocal" class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>보컬변환란</h2>
+            <p>커버 오디오의 길이와 음 흐름은 유지하고, 학습 체크포인트별 표현 변화 결과를 비교합니다.</p>
+          </div>
+          <span class="badge">1개 · 1GB 이하</span>
+        </div>
+
+        <div class="card">
+          <label class="filebox">
+            <input id="vocalFile" type="file" accept="audio/*" />
+            <strong>변환할 보컬 업로드</strong>
+            <span>보컬 단일 파일을 올리세요.</span>
+          </label>
+          <button id="vocalBtn" class="primary">변환하기</button>
+        </div>
+
+        <div id="vocalResult" class="result-grid"></div>
+      </section>
+
+      <section id="inst" class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>반주변환란</h2>
+            <p>반주 트랙을 업로드하고 변환된 보컬과 맞출 수 있도록 별도 트랙으로 출력합니다.</p>
+          </div>
+          <span class="badge">보컬/반주 각각 다운로드</span>
+        </div>
+
+        <div class="card two-col">
+          <label class="filebox">
+            <input id="instFile" type="file" accept="audio/*" />
+            <strong>반주 업로드</strong>
+            <span>고품질 WAV로 정규화합니다.</span>
+          </label>
+          <div class="stack">
+            <button id="instBtn" class="primary">바꾸기</button>
+            <button id="alignBtn" class="secondary" disabled>변환된 보컬에 맞추기</button>
+          </div>
+        </div>
+
+        <div id="instResult" class="result-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="audioCardTemplate">
+    <article class="audio-card">
+      <div class="audio-title"></div>
+      <audio controls preload="metadata"></audio>
+      <a class="download" download>오디오 파일 다운로드</a>
+    </article>
+  </template>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

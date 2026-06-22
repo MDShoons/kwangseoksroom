@@ -1,0 +1,14 @@
+# 설치
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+pip install -e .
+
+# 매니페스트 생성
+python scripts/make_manifest.py --input data/authorized_vocals --output data/manifest.json
+
+# 스타일 프로파일 생성
+python -m authorized_vocal_style_ai.train --manifest data/manifest.json --consent consent.json --output outputs/style_profile.json
+
+# 연구용 데모 가이드 생성
+python -m authorized_vocal_style_ai.cover --style outputs/style_profile.json --source data/source_songs/example.wav --output outputs/demo_vocal_guide.wav

@@ -1,0 +1,27 @@
+project:
+  name: Authorized Vocal Style AI Prototype
+  mode: consent_based_research
+
+feature_extraction:
+  sample_rate: 22050
+  frame_ms: 40
+  hop_ms: 10
+  estimate:
+    - rms_energy
+    - zero_crossing_rate
+    - pitch_proxy
+    - vibrato_proxy
+    - breathiness_proxy
+    - timing_proxy
+
+model_design:
+  pitch_branch: neck_pitch_height_and_vibrato
+  pronunciation_branch: mouth_phoneme_articulation
+  style_branch: breath_attack_timbre_timing
+  fusion: concatenate_style_pitch_pronunciation
+  generator: placeholder_for_mel_or_waveform_decoder
+
+safety:
+  require_consent_json: true
+  require_disclosure: true
+  write_output_metadata: true

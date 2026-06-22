@@ -1,0 +1,19 @@
+{
+  "project_name": "Authorized Vocal Style AI Prototype",
+  "rights_holder": "",
+  "vocalist_name_or_alias": "",
+  "all_singers_consented": false,
+  "dataset_is_authorized": false,
+  "allowed_use": [
+    "research",
+    "internal_demo"
+  ],
+  "prohibited_use": [
+    "unauthorized_real_person_voice_clone",
+    "impersonation",
+    "commercial_release_without_contract",
+    "misleading_public_distribution"
+  ],
+  "disclosure_text": "AI synthesized vocal demo created from authorized data; not a live human performance.",
+  "consent_document_path": "consent_template.md"
+}

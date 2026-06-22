@@ -1,90 +1,149 @@
-# Authorized Vocal Style AI Prototype
+# 동의 기반 보컬 스타일 AI 사이트 프로토타입
 
-이 ZIP은 **권리자와 보컬 당사자의 명시적 동의를 받은 음성 데이터만** 사용하도록 설계한 연구용 프로토타입입니다.  
-실존 가수·성우·일반인의 목소리를 허락 없이 복제하거나, 특정 인물인 것처럼 들리게 만들어 배포하는 용도로 사용할 수 없습니다.
+이 프로젝트는 **동의받은 보컬 데이터만** 업로드하여 보컬 스타일 프로파일을 만들고, 연구용 보컬 가이드 WAV를 생성하는 웹사이트형 프로토타입입니다.
 
-## 목표
+> 이 프로젝트는 특정 실존 가수의 목소리를 무단 복제하거나, 사칭하거나, 상업 배포하기 위한 도구가 아닙니다. 기본 설계는 권리 확인·동의 확인·AI 표시를 통과해야만 실행되도록 되어 있습니다.
 
-사용자가 제공한 합법적 보컬 데이터에서 다음 요소를 분리해 분석하는 구조를 제공합니다.
+---
 
-1. **음높이/발성 계층**: 목에서 만들어지는 피치, 강세, 고음/저음 변화, 바이브레이션 경향
-2. **발음/조음 계층**: 입 모양과 발음에 해당하는 음소·발음 흐름
-3. **표현/창법 계층**: 호흡, 레이드백, 어택, 비브라토, 음색 경향
-4. **합성 계층**: source song의 멜로디/가사/발음 정보에 style profile을 적용하는 구조
-
-현재 ZIP은 **완성형 상용 보컬 복제 모델이 아니라**, 안전장치가 포함된 설계·코드 스캐폴드입니다. 실제 고품질 보컬 합성을 하려면 대규모 데이터, 권리 검증, 음성합성 모델, 보컬 분리, 음소 정렬, 학습 인프라가 추가로 필요합니다.
-
-## 빠른 시작
-
-```bash
-cd authorized_vocal_style_ai
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
-pip install -r requirements.txt
-pip install -e .
-```
-
-1. `consent.json`을 열어 권리자·보컬 당사자 동의 정보를 채웁니다.
-2. `all_singers_consented`를 `true`로 바꾸기 전에는 학습 코드가 실행되지 않습니다.
-3. 동의받은 WAV 파일을 `data/authorized_vocals/`에 넣습니다.
-4. 매니페스트 생성:
-
-```bash
-python scripts/make_manifest.py --input data/authorized_vocals --output data/manifest.json
-```
-
-5. 스타일 프로파일 학습/추출:
-
-```bash
-python -m authorized_vocal_style_ai.train --manifest data/manifest.json --consent consent.json --output outputs/style_profile.json
-```
-
-6. 연구용 커버 데모 생성:
-
-```bash
-python -m authorized_vocal_style_ai.cover --style outputs/style_profile.json --source data/source_songs/example.wav --output outputs/demo_vocal_guide.wav
-```
-
-## 폴더 구조
+## 1. 구성
 
 ```text
-authorized_vocal_style_ai/
-├─ README_ko.md
-├─ LEGAL_SAFETY.md
-├─ consent.json
-├─ consent_template.md
-├─ requirements.txt
-├─ project_config.yaml
-├─ data/
-│  ├─ authorized_vocals/
-│  └─ source_songs/
-├─ outputs/
-├─ scripts/
-│  ├─ make_manifest.py
-│  └─ run_demo.py
+authorized_vocal_style_site/
+├─ backend/
+│  ├─ app.py              # FastAPI 서버
+│  └─ safety.py           # 동의/권리/파일 안전 검사
+├─ frontend/static/
+│  ├─ index.html          # 웹 화면
+│  ├─ style.css           # 화면 디자인
+│  └─ app.js              # 업로드/요청 처리
 ├─ src/authorized_vocal_style_ai/
-│  ├─ consent.py
-│  ├─ audio_features.py
-│  ├─ model.py
-│  ├─ train.py
-│  ├─ cover.py
-│  └─ watermark.py
-└─ tests/
-   └─ test_consent.py
+│  ├─ train.py            # 보컬 스타일 프로파일 생성
+│  ├─ cover.py            # 연구용 가이드 WAV 생성
+│  ├─ audio_features.py   # 피치·호흡·바이브레이션 기초 분석
+│  ├─ consent.py          # 동의 확인 로직
+│  └─ watermark.py        # AI 합성물 메타데이터 기록
+├─ uploads/               # 업로드 파일 저장 위치
+├─ outputs/               # 결과 파일 저장 위치
+├─ requirements.txt
+├─ run_server.bat         # Windows 실행 파일
+└─ run_server.sh          # macOS/Linux 실행 파일
 ```
 
-## 중요한 제한
+---
 
-- “완벽한 특정 가수 모창”을 자동 생성하는 모델이 아닙니다.
-- 유명 가수, 사망한 가수, 일반인, 지인의 목소리도 권리자 동의 없이 학습시키면 안 됩니다.
-- 결과물에는 `watermark.py`로 생성 정보와 동의 기반 사용 표시를 남기도록 설계했습니다.
-- 음원 자체의 저작권과 보컬 음성의 권리는 별개입니다. 반주·멜로디·가사 사용 권리도 확인해야 합니다.
+## 2. 실행 방법
 
-## 다음 개발 단계
+### Windows
 
-1. 보컬 분리: Demucs/Spleeter 등으로 보컬 stem 분리
-2. 음소 정렬: WhisperX/MFA 등으로 가사와 음성 alignment
-3. 피치 추출: CREPE, RMVPE 등 정밀 F0 추출
-4. 보컬 합성: Diffusion/TTS/VC 계열 모델 연결
-5. 평가: 음색 유사도, 발음 명료도, 창법 유사도, 사칭 위험도 평가
-6. 배포 안전장치: 권리 검증, 워터마크, 사용 로그, 출력 고지 문구
+```bat
+run_server.bat
+```
+
+### macOS / Linux
+
+```bash
+./run_server.sh
+```
+
+서버가 실행되면 브라우저에서 아래 주소로 접속합니다.
+
+```text
+http://localhost:8000
+```
+
+---
+
+## 3. 사용 흐름
+
+### 1단계: 보컬 스타일 학습
+
+1. 프로젝트명 입력
+2. 권리자/동의권자 이름 입력
+3. 보컬 제공자 이름 또는 별칭 입력
+4. 동의받은 WAV 파일 업로드
+5. 다음 체크 항목을 모두 확인
+   - 모든 보컬 제공자의 명시적 동의
+   - 업로드 음원의 학습·분석 사용 권한
+   - 실존 인물 사칭·무단 모창·상업 배포 금지
+   - 결과물에 AI 합성/연구용 데모 표시
+6. `스타일 프로파일 생성` 클릭
+
+완료되면 `job_id`가 생성됩니다.
+
+### 2단계: 커버/가이드 생성
+
+1. 1단계에서 생성된 `job_id` 확인
+2. 변환할 노래 WAV 파일 업로드
+3. `연구용 가이드 생성` 클릭
+4. 생성된 WAV를 브라우저에서 재생하거나 다운로드
+
+---
+
+## 4. 중요한 제한
+
+현재 프로토타입은 실제 상용 보컬 복제 모델이 아닙니다.
+
+- 특정 가수의 실제 목소리를 완벽히 복제하지 않습니다.
+- 연구용 보컬 가이드 톤만 생성합니다.
+- MP3가 아닌 WAV 파일만 허용합니다.
+- 동의/권리 확인 체크가 없으면 실행되지 않습니다.
+- 결과 파일 옆에 AI 합성물 메타데이터가 저장됩니다.
+
+---
+
+## 5. 기존 사이트에 붙이는 방법
+
+GitHub Pages 같은 정적 사이트에서는 파이썬 AI 학습을 직접 실행할 수 없습니다. 따라서 구조는 다음처럼 분리해야 합니다.
+
+```text
+기존 웹사이트 메뉴
+   ↓
+AI 보컬 페이지 링크 또는 iframe
+   ↓
+FastAPI 서버
+   ↓
+Python AI 처리
+   ↓
+결과 WAV 반환
+```
+
+기존 사이트에 붙일 때는 메뉴에 다음 링크를 추가하면 됩니다.
+
+```html
+<a href="https://서버주소/" target="_blank">AI 보컬 연구실</a>
+```
+
+또는 같은 서버에 올리는 경우 다음처럼 연결할 수 있습니다.
+
+```html
+<a href="/ai-vocal/">AI 보컬 연구실</a>
+```
+
+---
+
+## 6. 배포 시 권장 안전 문구
+
+사이트 하단 또는 업로드 화면에 아래 문구를 넣는 것을 권장합니다.
+
+```text
+본 기능은 권리자와 보컬 제공자의 명시적 동의를 받은 음성 자료만 사용할 수 있습니다.
+실존 인물의 목소리를 무단 복제하거나, 특정 가수가 실제로 부른 것처럼 표시하거나,
+권리자 허락 없이 공개·상업 배포하는 행위는 금지됩니다.
+생성 결과물은 AI 합성/연구용 데모임을 명확히 표시해야 합니다.
+```
+
+---
+
+## 7. 실제 서비스로 확장하려면
+
+실서비스 단계에서는 다음이 추가로 필요합니다.
+
+- 로그인/회원 권한 연동
+- 업로드 용량 제한 및 바이러스 검사
+- 작업 대기열 Celery/RQ
+- GPU 서버 연결
+- 개인정보·음성 데이터 삭제 기능
+- 동의서 파일 업로드 및 보관
+- 관리자 승인 후 학습 실행
+- AI 생성물 표시/워터마킹 강화

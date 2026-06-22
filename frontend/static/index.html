@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Authorized Vocal Style AI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero card">
+      <p class="eyebrow">Consent-based Research Prototype</p>
+      <h1>동의 기반 보컬 스타일 AI 사이트</h1>
+      <p class="hero-text">
+        이 사이트는 권리자와 보컬 제공자의 동의가 확인된 WAV 파일만 분석하여
+        보컬 스타일 프로파일을 만들고, 연구용 보컬 가이드 음원을 생성합니다.
+      </p>
+      <div class="notice-box">
+        <strong>중요:</strong> 실존 가수의 무단 목소리 복제, 사칭, 상업 배포 기능은 제공하지 않습니다.
+        결과물에는 AI 합성/연구용 데모 표시가 포함됩니다.
+      </div>
+    </section>
+
+    <section class="grid">
+      <form id="trainForm" class="card form-card">
+        <div class="step-badge">1</div>
+        <h2>보컬 스타일 학습</h2>
+        <p class="muted">동의받은 보컬 WAV 파일을 최대 10개까지 업로드합니다.</p>
+
+        <label>
+          프로젝트명
+          <input name="project_name" value="Authorized Vocal Style AI Site Demo" />
+        </label>
+
+        <label>
+          권리자/동의권자 이름
+          <input name="rights_holder" placeholder="예: 본인, 소속사, 권리자명" required />
+        </label>
+
+        <label>
+          보컬 제공자 이름 또는 별칭
+          <input name="vocalist_name_or_alias" placeholder="예: Vocalist A" required />
+        </label>
+
+        <label>
+          학습용 WAV 파일
+          <input type="file" name="files" accept=".wav,audio/wav" multiple required />
+        </label>
+
+        <div class="checks">
+          <label><input type="checkbox" name="all_singers_consented" /> 모든 보컬 제공자의 명시적 동의를 받았습니다.</label>
+          <label><input type="checkbox" name="dataset_is_authorized" /> 업로드 음원의 학습·분석 사용 권한이 있습니다.</label>
+          <label><input type="checkbox" name="no_impersonation" /> 실존 인물 사칭·무단 모창·상업 배포를 하지 않습니다.</label>
+          <label><input type="checkbox" name="ai_disclosure_agreed" /> 결과물에 AI 합성/연구용 데모임을 표시하는 데 동의합니다.</label>
+        </div>
+
+        <button type="submit">스타일 프로파일 생성</button>
+      </form>
+
+      <form id="coverForm" class="card form-card">
+        <div class="step-badge">2</div>
+        <h2>커버/가이드 생성</h2>
+        <p class="muted">1단계에서 생성된 job_id를 사용해 연구용 보컬 가이드를 만듭니다.</p>
+
+        <label>
+          Job ID
+          <input name="job_id" id="jobIdInput" placeholder="1단계 완료 후 자동 입력됩니다." required />
+        </label>
+
+        <label>
+          변환할 노래 WAV 파일
+          <input type="file" name="source_song" accept=".wav,audio/wav" required />
+        </label>
+
+        <button type="submit">연구용 가이드 생성</button>
+      </form>
+    </section>
+
+    <section class="card result-card">
+      <h2>처리 결과</h2>
+      <pre id="resultBox">아직 실행된 작업이 없습니다.</pre>
+      <div id="audioPanel" class="audio-panel hidden">
+        <h3>생성된 연구용 보컬 가이드</h3>
+        <audio id="audioPlayer" controls></audio>
+        <div class="link-row">
+          <a id="downloadAudio" href="#" download>WAV 다운로드</a>
+          <a id="downloadProfile" href="#" download>스타일 프로파일 다운로드</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
